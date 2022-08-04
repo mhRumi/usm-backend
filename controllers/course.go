@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 	"ums/connection"
 	"ums/models"
 
@@ -38,4 +40,29 @@ func GetAllCourses(c echo.Context) error {
 		courses = append(courses, course)
 	}
 	return c.JSON(http.StatusOK, courses)
+}
+
+func DeleteCourse(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	sqlStatement := "DELETE FROM courses WHERE id=$1"
+	_, err := connection.DB.Query(sqlStatement, id)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusNoContent, map[string]interface{}{"message": "Deleted"})
+}
+
+func UpdateCourse(c echo.Context) error {
+	course := new(models.Course)
+	id, _ := strconv.Atoi(c.Param("id"))
+	if err := c.Bind(course); err != nil {
+		return err
+	}
+	sqlStatement := "UPDATE courses SET name=$1, description=$2 WHERE id=$3"
+	res, err := connection.DB.Query(sqlStatement, course.Name, course.Description, id)
+	if err != nil {
+		fmt.Println(res)
+		return err
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{"message": "Updated"})
 }

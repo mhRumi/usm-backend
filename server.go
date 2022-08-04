@@ -29,6 +29,8 @@ func main() {
 	e.POST("/api/v1/imageupload", controllers.UploadImage, middlewares.IsLoggedIn)
 	e.POST("/api/v1/course", controllers.CourseRegistration)
 	e.GET("/api/v1/course", controllers.GetAllCourses)
+	e.DELETE("/api/v1/course/:id", controllers.DeleteCourse)
+	e.PATCH("/api/v1/course/:id", controllers.UpdateCourse)
 	e.GET("/", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, "Ok")
 	})
