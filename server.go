@@ -27,6 +27,7 @@ func main() {
 	e.GET("api/v1/private", controllers.Private, middlewares.IsLoggedIn, middlewares.Restricted)
 	e.POST("/api/v1/blog", controllers.PostBlog, middlewares.IsLoggedIn)
 	e.POST("/api/v1/imageupload", controllers.UploadImage, middlewares.IsLoggedIn)
+	e.POST("/api/v1/course", controllers.CourseRegistration)
 	e.GET("/", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, "Ok")
 	})

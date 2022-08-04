@@ -13,8 +13,8 @@ import (
 )
 
 type JwtCustomClaim struct {
-	Reg_No int64  `json:"reg_no"`
-	Role   string `json:"role"`
+	Email string `json:"email"`
+	Role  string `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -30,7 +30,7 @@ func CheckPasswordHash(password, hash string) bool {
 
 func generateToken(credential *models.Credential) string {
 	claims := &JwtCustomClaim{
-		credential.Reg_No,
+		credential.Email,
 		credential.Role,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
@@ -52,7 +52,7 @@ func Login(c echo.Context) error {
 	}
 	var credential models.Credential
 	sqlStatement := "SELECT * FROM credentials WHERE email=$1"
-	err := connection.DB.QueryRow(sqlStatement, claimCred.Email).Scan(&credential.Id, &credential.Password, &credential.Role, &credential.Status, &credential.Email, &credential.CreatedAt, &credential.UpdatedAt, &credential.Reg_No)
+	err := connection.DB.QueryRow(sqlStatement, claimCred.Email).Scan(&credential.Id, &credential.Password, &credential.Role, &credential.Status, &credential.Email)
 	if err != nil {
 		return err
 	}
