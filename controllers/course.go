@@ -20,3 +20,22 @@ func CourseRegistration(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, map[string]interface{}{"message": "Successfully created"})
 }
+
+func GetAllCourses(c echo.Context) error {
+	var courses []models.Course
+	sqlStatement := "SELECT * FROM courses ORDER BY id"
+	rows, err := connection.DB.Query(sqlStatement)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var course models.Course
+		err := rows.Scan(&course.Id, &course.Name, &course.Description)
+		if err != nil {
+			return err
+		}
+		courses = append(courses, course)
+	}
+	return c.JSON(http.StatusOK, courses)
+}
