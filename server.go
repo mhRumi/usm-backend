@@ -20,10 +20,10 @@ func main() {
 	}
 
 	e.Static("/assets", "assets")
-	e.POST("/register", controllers.Registration)
-	e.POST("/login", controllers.Login)
+	e.POST("api/v1/register", controllers.Registration)
+	e.POST("/api/v1/login", controllers.Login)
 	e.GET("/api/v1/blogs", controllers.GetApprovedBlogs)
-	e.GET("/health", controllers.Health)
+	e.GET("/api/v1/health", controllers.Health)
 	e.GET("api/v1/private", controllers.Private, middlewares.IsLoggedIn, middlewares.Restricted)
 	e.POST("/api/v1/blog", controllers.PostBlog, middlewares.IsLoggedIn)
 	e.POST("/api/v1/imageupload", controllers.UploadImage, middlewares.IsLoggedIn)
